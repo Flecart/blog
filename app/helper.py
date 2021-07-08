@@ -111,8 +111,8 @@ def get_page_content(id):
 
 def date_parser(date):
     # le date dovrebbero sempre restare nel formato di Notion, quindi faccio soluzioone ez...
-
     return date[:10]
+
 
 # debuggin stuff here
 if __name__ == "__main__":

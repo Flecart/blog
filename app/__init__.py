@@ -41,7 +41,7 @@ def index():
         tmp_dict['id'] = page['id']
         scrapped_pages.append(tmp_dict)
     
-    return render_template("index.jinja", pages=scrapped_pages, time=time())
+    return render_template("index.jinja", pages=scrapped_pages)
     
 
 @app.route("/errore_interno")
