@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+   
+{% block body %}
+    <link href="/static/index.css?v={{time}}" rel="stylesheet">
+    <div class="section">
+        <h2>
+            Implementato articoli da database!
+        </h2>
+        <p>
+            Sono riuscito ad integrare con Notion, che dovresti ricordare perché l'avevo consigliato come editor di testo per l'elaborato di matematica.
+            Credo sia la cosa più comoda per pubblicare, dato che ti basta scrivere qualcosa lì e il tuo sito automaticamente ti crea l'articolo con tutto.
+        </p>   
+        <p>
+            Gli articoli che vedi ora sono di test nel mio Notion personale.
+        </p> 
+    </div>
+
+    <div class="section">
+        <p>
+            Quindi ti devo obbligare ad imparare come si usa Notion ahah 😆, ma Notion è fatto molto bene, dopo ti cerco un GettingStarted dal sito principale
+            In alternativa Notion dovrebbe supportare anche Google Docs quindi potrebbe bastare Docs se proprio non ti piace (ma ti consiglio di imparartelo!)
+        </p>
+        <p>
+            Una cosa che dovrei ancora capire è l'impostazione della pagina, cosa che vorrei che mi aiutassi a decidere. Ma per ora credo sia tutto
+        </p>
+    </div>
+    <p class="right">
+        <em>Angelo :)</em>
+    </p>
+
+    {# qui ci devo mettere le cose che trovo nel database #}
+    <div class="center">
+        {% for page in pages %}
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                {# il type `e sempre una lista, ma in questo caso sono sicuro che e lunga 1 perch'e controllo io 
+                    la struttura `e un po complessa ma basta guardare il json che mi torna che e sempre con questa
+                    struttura in particolare guardare 
+                    https://developers.notion.com/reference/page
+                    io ho preso solamente i risultati che mi servivano ossia le propriet`a e id
+                #}
+                    <h5 class="card-title"> {{ page['Nome articolo'][page['Nome articolo']['type']][0]['plain_text'] }}</h5>
+                    {# solo il tempo sembra essere diverso #}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ page['Data'][page['Data']['type']] | date_parser }}</h6>
+                    <p class="card-text">{{ page['Descrizione articolo'][page['Descrizione articolo']['type']][0]['plain_text'] }}</p>
+                    <a href="/articles/{{ page['id'] }}" class="card-link">Visita la pagina</a>
+                </div>
+            </div>
+            <div class='section'>
+            {# jsut making space #}
+            </div>
+        {% endfor %}
+    </div>
+    <div class='section'>
+    <a href="https://www.notion.so/guides">https://www.notion.so/guides</a>
+        <br>
+        questo `e la pagina principale, ora ti cerco un po di cose piu specifiche
+         (ce troppa roba li mi sembra)
+    </div>
+    <div class='section'>
+        ma poi deve essere che `e simile a un editor normale... Non credo ti sia difficile imparartelo
+        <br>
+        L' unica cosa che credo siano nuovi sono i comandi slash, quindi ti metto una tabella con comandi disponibili.
+        <a href="https://namaraii.com/cheatsheet/notion.html">https://namaraii.com/cheatsheet/notion.html</a>
+        Divertiti a provarli!
+        <br>
+        <a href="https://notion.so"> notion.so </a> per iscriverti a Notion
+        <p>
+        Poi dimmi cosa ne pensi finora! Dovrei risolvere qualche bug (che probabilmente usciranno quando lo cominceremo ad usare per un pò)
+        Ma per il resto tutto il codice principale `e finito, devi mettere su Notion importare un po di cose e potresti gi`a usarlo!!
+        </p>
+    </div>
+{% endblock %}

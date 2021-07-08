@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    {# <!-- ora inizia la roba forte! cioe crear eun sistema per fechare i data -->
+    <!-- sto mettendo esattamente come mi viene in risposta, non so se `e buona cosa... --> #}
+   
+    {% for block in page["results"] %}
+
+        {# apro subito il div perche cosi e piu bello #}
+        <div class="section">
+
+        {% if block["type"] == 'heading_1' %} 
+            <h1>{{ block["heading_1"]["text"][0]["plain_text"] }}</h1>
+
+        {% elif block['type'] == 'heading_2' %} 
+            <h2>{{ block["heading_2"]["text"][0]["plain_text"] }}</h2>
+
+        {% elif block['type'] == 'heading_3' %} 
+            <h3>{{ block["heading_3"]["text"][0]["plain_text"] }}</h3>
+
+        {% elif block['type'] == "paragraph" %} 
+
+        
+        {# <!-- ogni paragrafo potrebbe avere altri cosi per creare lineature strane... -->
+        <!--  io apro e chiudo per ogni annotazione -->
+        <!-- ricorda che lo trovi qui https://developers.notion.com/reference/get-block-children --> #}
+       
+            {% for text in block["paragraph"]["text"] %}
+                {% if text["annotations"]["bold"] %}
+                    <strong>
+                {% elif text["annotations"]["italic"] %}
+                    <em>
+                {% elif text["annotations"]["strikethrough"] %}
+                    <del>
+                {% elif text["annotations"]["underline"] %}
+                    <ins>
+                {% endif %} 
+
+                    {{ text["plain_text"] }}
+                
+                {% if text["annotations"]["bold"] %}
+                    </strong>
+                {% elif text["annotations"]["italic"] %}
+                    </em>
+                {% elif text["annotations"]["strikethrough"] %}
+                    </del>
+                {% elif text["annotations"]["underline"] %}
+                    </ins>
+                {% endif %} 
+            {% endfor %}
+
+        {% elif block['type'] == "bulleted_list_item" %} 
+            {# intanto apro la lista #}
+
+            <ul>
+            {% for text in block["bulleted_list_item"]["text"] %}
+                {% if text["annotations"]["bold"] %}
+                    <strong>
+                {% elif text["annotations"]["italic"] %}
+                    <em>
+                {% elif text["annotations"]["strikethrough"] %}
+                    <del>
+                {% elif text["annotations"]["underline"] %}
+                    <ins>
+                {% endif %} 
+
+                    <li>{{ text["plain_text"] }}</li>
+                
+                {% if text["annotations"]["bold"] %}
+                    </strong>
+                {% elif text["annotations"]["italic"] %}
+                    </em>
+                {% elif text["annotations"]["strikethrough"] %}
+                    </del>
+                {% elif text["annotations"]["underline"] %}
+                    </ins>
+                {% endif %} 
+            {% endfor %}
+            </ul>
+
+        {% elif block['type'] == "to_do" %} 
+        {# non ancora supportato, per ora non displayo niente #}
+        {% else %} 
+                <p> blocco {{ block['type'] }} non riconosciuto</p>
+                
+        {% endif %}
+                
+        </div>
+    {% endfor %}
+{% endblock %}
