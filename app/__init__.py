@@ -6,12 +6,20 @@ from time import time
 # probabilmente sta nel comando gunicorn app:app
 # che non ho cpaito il secondo app cosa sia.
 
-# da fare per usare flask run: 
-#  export FLASK_APP=__init__.py  
 app = Flask(__name__)
 
 # Custom filter
+# see here https://flask.palletsprojects.com/en/2.0.x/templating/#registering-filters
 app.jinja_env.filters["date_parser"] = date_parser
+
+# Ensure responses aren't cached, for debuggin purposes
+if app.debug:
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
 
 # set environment variables and catch errors meanwhile
 try:
@@ -61,9 +69,6 @@ def article(id):
 # BIG TO DOS
 # decidere la grafica del sito
 # in particolare come si fa a creare un css template?
-
-# creare parser per permettere a matteo di scrifere su?
-# sarebbe bello provare a fare compatibilit`a con word o docs
 
 # creare database
 

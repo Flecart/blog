@@ -64,13 +64,7 @@ def query(id, data={}):
 
     # keeping only the JSON text
     res = json.loads(res.text)
-
-    # creates array of wanted stuff
-    # page_ids = []
-    # for page in res['results']:
-    #     page_ids.append(page)
-
-    # print(page_ids)
+    
     return res
 
 
@@ -86,9 +80,6 @@ def get_page_properties(id):
     
     # keeping only the JSON text
     res = json.loads(res.text)
-    print(res) # debugging stuff here on
-    for key in res:
-        print(key)
 
     return res
 
@@ -105,7 +96,6 @@ def get_page_content(id):
 
     # keeping only the JSON text
     res = json.loads(res.text)
-    # print(res) # debugging stuff here on
 
     return res
 
