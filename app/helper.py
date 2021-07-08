@@ -52,12 +52,12 @@ def get_database(page):
 
 # queries the database based on id (see response structure with this link)
 # https://developers.notion.com/reference/post-database-query
-def query(id, query="{}"):
+def query(id, data={}):
     # TODO make queries work
 
     url = f"https://api.notion.com/v1/databases/{id}/query"
     headers = {'Authorization': f'Bearer {API_KEY}', 'Notion-Version' : VERSION}
-    res = requests.post(url, headers=headers)
+    res = requests.post(url, headers=headers, data=data)
 
     # checking if request went just fine
     check_res_code(res.status_code, res.text)
@@ -66,12 +66,12 @@ def query(id, query="{}"):
     res = json.loads(res.text)
 
     # creates array of wanted stuff
-    page_ids = []
-    for page in res['results']:
-        page_ids.append(page['id'])
+    # page_ids = []
+    # for page in res['results']:
+    #     page_ids.append(page)
 
     # print(page_ids)
-    return page_ids
+    return res
 
 
 # see https://developers.notion.com/reference/get-page
@@ -90,8 +90,11 @@ def get_page_properties(id):
     for key in res:
         print(key)
 
-    return
+    return res
 
+
+# see here, every page is a block with notion!
+# https://developers.notion.com/reference/get-block-children
 def get_page_content(id):
     url = f"https://api.notion.com/v1/blocks/{id}/children"
     headers = {'Authorization': f'Bearer {API_KEY}', 'Notion-Version' : VERSION}
@@ -99,14 +102,36 @@ def get_page_content(id):
 
     # checking if request went just fine
     check_res_code(res.status_code, res.text)
-    
+
     # keeping only the JSON text
     res = json.loads(res.text)
-    print(res) # debugging stuff here on
+    # print(res) # debugging stuff here on
 
-    return
+    return res
+
+def date_parser(date):
+    # le date dovrebbero sempre restare nel formato di Notion, quindi faccio soluzioone ez...
+
+    return date[:10]
+
 # debuggin stuff here
 if __name__ == "__main__":
-    
-    pages = query(DATABASE)
-    get_page_content(pages[0])
+    # getting the stuff to fetch
+    data = {"page_size": 5}
+    pages = query(DATABASE, data)
+
+    # mi creo una lista di pagine, che saranno delle cards dopo
+    scrapped_pages = []
+
+    for page in pages['results']:
+        # sono le proprieta del database che ho deciso io!
+        # quindi sono abbastanza sicuro che ci siano
+        # quindi le tengo cosi
+        tmp_dict = page['properties']
+        tmp_dict['id'] = page['id']
+        scrapped_pages.append(tmp_dict)
+
+    tmp = scrapped_pages[0]['Nome articolo']['type']
+    print()
+    print(scrapped_pages[0]['Nome articolo'][ tmp ][0]['plain_text'])
+    # print(scrapped_pages)
